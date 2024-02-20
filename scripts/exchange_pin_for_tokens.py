@@ -1,7 +1,7 @@
 import sys
 import tweepy
 
-# Your app's consumer keys
+# DON'T CHANGE
 CONSUMER_KEY = "2bcFOj1TY9xPBKkCvODGqbhsu"
 CONSUMER_SECRET = "Ij14PYzKTBhpeSQ2I1fy315q7dkgwP1w2RLFfv147RMDvcm0qg"
 

@@ -40,7 +40,7 @@ public class TwitterController {
         } catch (Exception e) {
             modelAndView = new ModelAndView("error");
             modelAndView.addObject("message", "Failed to post tweet: " + e.getMessage());
-            // Optionally, you can also pass the error details to the frontend
+
             modelAndView.addObject("errorDetails", e.toString());
         }
 
@@ -60,7 +60,7 @@ public class TwitterController {
             session.setAttribute("access_token", parts[0]);
             session.setAttribute("access_token_secret", parts[1]);
 
-            return "redirect:/post-tweet"; // Redirect to the tweet posting form
+            return "redirect:/post-tweet"; //<-- Redirect to the tweet posting form
         } catch (IOException e) {
             e.printStackTrace();
             return "error"; // Return an error view if something goes wrong
@@ -71,10 +71,10 @@ public class TwitterController {
     public String showTweetForm(HttpSession session) {
         if (session.getAttribute("access_token") != null) {
             // User is authenticated, show the tweet form
-            return "post-tweet"; // GOES TO "post-tweet.html"
+            return "post-tweet";
         } else {
             // User is not authenticated, redirect to start authentication
-            return "redirect:/"; // Adjust as necessary
+            return "redirect:/"; // <--- Might need to change later
         }
     }
 
@@ -122,7 +122,8 @@ public class TwitterController {
                 throw new RuntimeException("Invalid tokens format: " + line);
             }
 
-            // Storing access token and secret in session and confirming action
+            // Storing access token and secret in session and confirming action, added
+            // console logs because I was stuck
             session.setAttribute("access_token", tokens[0]);
             session.setAttribute("access_token_secret", tokens[1]);
             System.out.println("Token 0 Access Token-> " + tokens[0]);
@@ -140,8 +141,8 @@ public class TwitterController {
 
 
     @GetMapping("/start-auth")
-    public ModelAndView startAuth(HttpSession session) { // Ensure HttpSession is passed as a parameter
-        ModelAndView modelAndView = new ModelAndView("auth-start"); // GOES TO "auth-start.html"
+    public ModelAndView startAuth(HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView("auth-start");
         try {
             // Ensure the process builder is correctly pointing to your script
             ProcessBuilder processBuilder = new ProcessBuilder("python", "scripts/generate_auth_url.py");
