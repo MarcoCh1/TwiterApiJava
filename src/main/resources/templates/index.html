@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Twitter OAuth Flow</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        div {
+            border: 3px solid black;
+            height: 150px;
+            width: 150px;
+            margin: auto;
+            border-radius: 12px;
+            background-color: #1DA1F2;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 28px;
+        }
+
+        ion-icon {
+            font-size: 56px;
+            color: white;
+        }
+
+        button:hover {
+            background-color: green;
+            opacity: 1;
+        }
+
+        button {
+            padding: 6px;
+            opacity: 0.8;
+            transition: 0.3s;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<h1>Connect Social Medias:</h1>
+<div>
+    <ion-icon name="logo-twitter"></ion-icon>
+    <!-- Thymeleaf URL -->
+    <button><a class="btn btn-primary" th:href="@{/start-auth}">Connect</a></button>
+</div>
+
+<!-- Include Ionicons as before -->
+<script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" type="module"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
