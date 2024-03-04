@@ -1,6 +1,8 @@
 package edu.missouristate.twiterapijava;
 
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,42 +17,51 @@ import java.util.stream.Collectors;
 @Controller
 public class TwitterController {
 
+    // At the beginning of your controller class
+    private static final Logger log = LoggerFactory.getLogger(TwitterController.class);
+
+
     @PostMapping("/tweet")
-    public ModelAndView postTweet(@RequestParam String tweetText) {
-        ModelAndView modelAndView;
-
+    public ModelAndView postTweet(@RequestParam String tweetText, HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView();
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder("python", "scripts/twitter_post_manager.py", tweetText);
-            processBuilder.redirectErrorStream(true); // Combine standard output and error streams
+            String accessToken = (String) session.getAttribute("access_token");
+            String accessTokenSecret = (String) session.getAttribute("access_token_secret");
+
+            log.debug("Attempting to post a tweet with text: {}", tweetText);
+            log.debug("Using Access Token: {}", accessToken);
+            log.debug("Using Access Token Secret: {}", accessTokenSecret);
+
+            ProcessBuilder processBuilder = new ProcessBuilder("python", "scripts/TwitterPythonScripts/twitter_post_manager.py", accessToken, accessTokenSecret, tweetText);
+            log.debug("Executing command: {}", String.join(" ", processBuilder.command()));
+
             Process process = processBuilder.start();
-
-            // Capture the output from the Python script
-            String scriptOutput = new BufferedReader(new InputStreamReader(process.getInputStream()))
-                    .lines().collect(Collectors.joining("\n"));
-
+            String scriptOutput = new BufferedReader(new InputStreamReader(process.getInputStream())).lines().collect(Collectors.joining("\n"));
             int exitCode = process.waitFor();
+
             if (exitCode == 0) {
-                modelAndView = new ModelAndView("result");
+                log.debug("Tweet posted successfully. Script output: {}", scriptOutput);
+                modelAndView.setViewName("result");
                 modelAndView.addObject("message", "Tweet posted successfully!");
-                // Pass the script output to the frontend
                 modelAndView.addObject("scriptOutput", scriptOutput);
             } else {
+                log.error("Failed to post tweet, exit code: {}", exitCode);
                 throw new Exception("Failed to post tweet, exit code " + exitCode);
             }
         } catch (Exception e) {
-            modelAndView = new ModelAndView("error");
+            log.error("Exception occurred while posting tweet: {}", e.getMessage(), e);
+            modelAndView.setViewName("error");
             modelAndView.addObject("message", "Failed to post tweet: " + e.getMessage());
-
-            modelAndView.addObject("errorDetails", e.toString());
         }
 
         return modelAndView;
     }
 
+
     @PostMapping("/submit-pin")
     public String submitPin(@RequestParam("pin") String pin, HttpSession session) {
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder("python", "scripts/exchange_pin_for_tokens.py", pin);
+            ProcessBuilder processBuilder = new ProcessBuilder("python", "scripts/TwitterPythonScripts/exchange_pin_for_tokens.py", pin);
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
 
@@ -99,7 +110,7 @@ public class TwitterController {
             }
 
             // Preparing and starting the process to exchange verifier for tokens
-            ProcessBuilder processBuilder = new ProcessBuilder("python", "scripts/exchange_verifier_for_tokens.py", oauthVerifier, requestToken, requestTokenSecret);
+            ProcessBuilder processBuilder = new ProcessBuilder("python", "scripts/TwitterPythonScripts/exchange_verifier_for_tokens.py", oauthVerifier, requestToken, requestTokenSecret);
             processBuilder.redirectErrorStream(true);
             System.out.println("Starting process to exchange verifier for tokens.");
             Process process = processBuilder.start();
@@ -145,7 +156,7 @@ public class TwitterController {
         ModelAndView modelAndView = new ModelAndView("auth-start");
         try {
             // Ensure the process builder is correctly pointing to your script
-            ProcessBuilder processBuilder = new ProcessBuilder("python", "scripts/generate_auth_url.py");
+            ProcessBuilder processBuilder = new ProcessBuilder("python", "scripts/TwitterPythonScripts/generate_auth_url.py");
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
 

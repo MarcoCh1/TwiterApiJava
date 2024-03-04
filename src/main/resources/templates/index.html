@@ -7,7 +7,7 @@
             text-align: center;
         }
 
-        div {
+        .wrapper-social {
             border: 3px solid black;
             height: 150px;
             width: 150px;
@@ -41,14 +41,31 @@
             text-decoration: none;
             color: black;
         }
+
+        .outer-wrapper {
+            display: flex;
+            width: 30%;
+            margin: auto;
+        }
+
     </style>
 </head>
 <body>
 <h1>Connect Social Medias:</h1>
-<div>
-    <ion-icon name="logo-twitter"></ion-icon>
 
-    <button><a class="btn btn-primary" th:href="@{/start-auth}">Connect</a></button>
+<div class="outer-wrapper">
+    <div class="wrapper-social">
+        <ion-icon name="logo-twitter"></ion-icon>
+
+        <button><a class="btn btn-primary" th:href="@{/start-auth}">Connect</a></button>
+    </div>
+
+    <div class="wrapper-social" style="background-color: #ff4500">
+        <ion-icon name="logo-reddit"></ion-icon>
+
+        <button><a class="btn btn-primary" th:href="@{/reddit/auth}">Connect</a></button>
+    </div>
+
 </div>
 
 
