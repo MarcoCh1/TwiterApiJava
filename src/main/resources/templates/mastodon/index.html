@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <script type="text/javascript">
+        function addMastodonAccount() {
+            // Correctly configure the URL for OAuth authorization including the correct redirect_uri
+            var authUrl = 'https://mastodon.social/oauth/authorize?client_id=0DIHKu7BCcGb9wuPLXIa-y4E7I9-TefyM9X5Q0Xym7w&response_type=code&redirect_uri=http://localhost:8080/callback&scope=read write';
+
+            // Directly navigate to the authorization URL without opening a new window
+            // This assumes the user flow is managed through redirects
+            window.location.href = authUrl;
+        }
+    </script>
+</head>
+<body>
+<h1>Welcome to Our Application</h1>
+<button onclick="addMastodonAccount()">Add Mastodon Account</button>
+</body>
+</html>

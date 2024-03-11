@@ -2,53 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Twitter OAuth Flow</title>
-    <style>
-        h1 {
-            text-align: center;
-        }
-
-        .wrapper-social {
-            border: 3px solid black;
-            height: 150px;
-            width: 150px;
-            margin: auto;
-            border-radius: 12px;
-            background-color: #1DA1F2;
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            align-items: center;
-            gap: 28px;
-        }
-
-        ion-icon {
-            font-size: 56px;
-            color: white;
-        }
-
-        button:hover {
-            background-color: green;
-            opacity: 1;
-        }
-
-        button {
-            padding: 6px;
-            opacity: 0.8;
-            transition: 0.3s;
-        }
-
-        a {
-            text-decoration: none;
-            color: black;
-        }
-
-        .outer-wrapper {
-            display: flex;
-            width: 30%;
-            margin: auto;
-        }
-
-    </style>
+    <link href="/style.css" rel="stylesheet">
 </head>
 <body>
 <h1>Connect Social Medias:</h1>
@@ -64,6 +18,20 @@
         <ion-icon name="logo-reddit"></ion-icon>
 
         <button><a class="btn btn-primary" th:href="@{/reddit/auth}">Connect</a></button>
+    </div>
+
+    <div class="wrapper-social" style="background-color: mediumpurple">
+        <img alt="" height="50px"
+             src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Mastodon_logotype_%28simple%29_new_hue.svg/120px-Mastodon_logotype_%28simple%29_new_hue.svg.png">
+
+        <button><a class="btn btn-primary" th:href="@{/mastodon/auth}">Connect</a></button>
+    </div>
+
+    <div class="wrapper-social" style="background-color: #9AD0C2">
+        <img alt="" height="50px"
+             src="https://avatars.githubusercontent.com/u/366151?s=200&v=4">
+
+        <button><a class="btn btn-primary" th:href="@{/tumblr/start-oauth}">Connect</a></button>
     </div>
 
 </div>

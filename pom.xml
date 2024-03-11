@@ -51,8 +51,25 @@
         </dependency>
 
         <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20220320</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.scribejava</groupId>
+            <artifactId>scribejava-core</artifactId>
+            <version>8.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.scribejava</groupId>
+            <artifactId>scribejava-apis</artifactId>
+            <version>8.3.3</version>
         </dependency>
 
 
