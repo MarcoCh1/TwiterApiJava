@@ -3,6 +3,7 @@ package edu.missouristate.twiterapijava;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,9 @@ public class RedditController {
     private static final Logger log = LoggerFactory.getLogger(RedditController.class);
     String CLIENT_ID = "6aK_iXozHqB7AlJY3aF6ZA";
     String CLIENT_SECRET = "6bEXPVk7tYpAAFj4fbH9Vj-XSKzGag";
-    String REDIRECT_URI = "http://localhost:8080/reddit/callback";
+    String REDIRECT_URI = "http://localhost:8080/reddit/callback";// This will hold the path to Python executable
+    @Value("${python.path}")
+    private String pythonPath; // This will hold the path to Python executable
 
     @GetMapping("/reddit/auth")
     public ModelAndView redditAuth(HttpSession session) {
@@ -62,7 +65,7 @@ public class RedditController {
 
         try {
             String pythonScriptPath = "scripts/RedditPythonScripts/exchange_auth_code_for_access_token.py";
-            ProcessBuilder processBuilder = new ProcessBuilder("python", pythonScriptPath, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, code);
+            ProcessBuilder processBuilder = new ProcessBuilder(pythonPath, pythonScriptPath, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, code);
             log.debug("Executing Python script: {}", String.join(" ", processBuilder.command()));
 
             Process process = processBuilder.start();
@@ -123,7 +126,7 @@ public class RedditController {
         }
 
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder("python", "scripts/RedditPythonScripts/reddit_submit_post.py", accessToken, subreddit, title, text);
+            ProcessBuilder processBuilder = new ProcessBuilder(pythonPath, "scripts/RedditPythonScripts/reddit_submit_post.py", accessToken, subreddit, title, text);
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
 

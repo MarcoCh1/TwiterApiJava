@@ -1,0 +1,5 @@
+Do the following below, run on your IDE:
+
+pip install -r requirements.txt
+
+Also, look into "src/main/resources/application.properties" and change the python path
