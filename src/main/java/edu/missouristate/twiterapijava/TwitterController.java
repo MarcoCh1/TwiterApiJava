@@ -1,8 +1,10 @@
 package edu.missouristate.twiterapijava;
 
+import edu.missouristate.twiterapijava.service.SocialMediaAccountService;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,8 @@ public class TwitterController {
 
     // At the beginning of your controller class
     private static final Logger log = LoggerFactory.getLogger(TwitterController.class);
+    @Autowired
+    private SocialMediaAccountService socialMediaAccountService;
     @Value("${python.path}")
     private String pythonPath; // This will hold the path to Python executable
 
@@ -40,6 +44,8 @@ public class TwitterController {
             Process process = processBuilder.start();
             String scriptOutput = new BufferedReader(new InputStreamReader(process.getInputStream())).lines().collect(Collectors.joining("\n"));
             int exitCode = process.waitFor();
+
+            socialMediaAccountService.saveSocialMediaAccount(2, "Twitter", accessToken);
 
             if (exitCode == 0) {
                 log.debug("Tweet posted successfully. Script output: {}", scriptOutput);

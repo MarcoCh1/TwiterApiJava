@@ -1,8 +1,10 @@
 package edu.missouristate.twiterapijava;
 
+import edu.missouristate.twiterapijava.service.SocialMediaAccountService;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,8 @@ public class RedditController {
     String CLIENT_ID = "6aK_iXozHqB7AlJY3aF6ZA";
     String CLIENT_SECRET = "6bEXPVk7tYpAAFj4fbH9Vj-XSKzGag";
     String REDIRECT_URI = "http://localhost:8080/reddit/callback";// This will hold the path to Python executable
+    @Autowired
+    private SocialMediaAccountService socialMediaAccountService;
     @Value("${python.path}")
     private String pythonPath; // This will hold the path to Python executable
 
@@ -124,6 +128,12 @@ public class RedditController {
             modelAndView.addObject("message", "Access Token is missing or invalid.");
             return modelAndView;
         }
+
+        Integer userId = 1; // Placeholder, adjust this according to your application's logic
+
+        // Save the SocialMediaAccount information when you have it
+        socialMediaAccountService.saveSocialMediaAccount(userId, "Reddit", accessToken.trim());
+
 
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(pythonPath, "scripts/RedditPythonScripts/reddit_submit_post.py", accessToken, subreddit, title, text);

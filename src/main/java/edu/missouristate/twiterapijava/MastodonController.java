@@ -1,7 +1,9 @@
 package edu.missouristate.twiterapijava;
 
+import edu.missouristate.twiterapijava.service.SocialMediaAccountService;
 import jakarta.servlet.http.HttpSession;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,8 @@ public class MastodonController {
     private static final String CLIENT_SECRET = "gT1Hyha5yI2ZHRk3BmUA3YkiuW2UFCC_e-JVDaM8rHE";
     private static final String REDIRECT_URI = "http://localhost:8080/callback";
     private static final String SCOPE = "read write";
+    @Autowired
+    private SocialMediaAccountService socialMediaAccountService;
 //    private static final String REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"; // will prob need to change
 
     @GetMapping("/mastodon/auth")
@@ -100,6 +104,7 @@ public class MastodonController {
             postMessageToMastodon(message, accessToken);
             modelAndView.setViewName("result"); // Assuming you have a "result.html" to show success
             modelAndView.addObject("message", "Message posted to Mastodon successfully!");
+            socialMediaAccountService.saveSocialMediaAccount(3, "Mastodon", accessToken);
         } catch (Exception e) {
             modelAndView.setViewName("error"); // Assuming you have an "error.html" to show errors
             modelAndView.addObject("error", "Failed to post message to Mastodon: " + e.getMessage());

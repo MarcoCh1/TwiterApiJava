@@ -4,12 +4,18 @@ import com.github.scribejava.apis.TumblrApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.*;
 import com.github.scribejava.core.oauth.OAuth10aService;
+import edu.missouristate.twiterapijava.service.SocialMediaAccountService;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TumblrServiceImpl implements TumblrService {
+
+    @Autowired
+    private SocialMediaAccountService socialMediaAccountService;
+
     private OAuth10aService oauthService;
     private OAuth1RequestToken requestToken;
     private OAuth1AccessToken accessToken;
@@ -82,5 +88,7 @@ public class TumblrServiceImpl implements TumblrService {
         if (response.getCode() != 201) {
             throw new RuntimeException("Failed to post to Tumblr: " + response.getBody());
         }
+
+        socialMediaAccountService.saveSocialMediaAccount(4, "Tumblr", String.valueOf(requestToken));
     }
 }
